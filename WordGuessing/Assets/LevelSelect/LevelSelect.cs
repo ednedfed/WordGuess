@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Xml;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public struct LevelInfo
@@ -34,6 +35,8 @@ public class LevelSelect : MonoBehaviour
 	{
 		try
 		{
+			throw new Exception();
+
 			List<LevelInfo> loadedLevels = new List<LevelInfo>();
 
 			XmlDocument document = new XmlDocument();
@@ -51,7 +54,7 @@ public class LevelSelect : MonoBehaviour
 
 			levels = loadedLevels.ToArray();
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			Debug.LogError(e);
 		}
@@ -62,7 +65,7 @@ public class LevelSelect : MonoBehaviour
 		//set up buttons with levels
 		for (int i = 0; i < levels.Length; ++i)
 		{
-			GameObject levelButtonObject = Object.Instantiate(levelButtonPrefab) as GameObject;
+			GameObject levelButtonObject = UnityEngine.Object.Instantiate(levelButtonPrefab) as GameObject;
 
 			Vector3 position = new Vector3 (xOffset, (levels.Length - i) * yOffset + startY, 0f);
 			levelButtonObject.transform.position = position;
