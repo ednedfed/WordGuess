@@ -1,0 +1,7 @@
+<levels>
+	<level id="0" answer="APPLE" image=""/>
+	<level id="1" answer="BANANA" image=""/>
+	<level id="2" answer="CHERRY" image=""/>
+	<level id="3" answer="DOUGHNUT" image=""/>
+	<level id="4" answer="BOLLOCKS" image=""/>
+</levels>
