@@ -19,8 +19,8 @@ public class GameSetup : MonoBehaviour
 	SlotPool _slotPool = new SlotPool();
 	SlotPool _answerSlotPool = new SlotPool();
 	
-	float _slotsY = -0.2f;
-	float _tilesY = -0.7f;
+	public float slotsY = -0.2f;
+	public float tilesY = -0.7f;
 	
 	void Awake()
 	{
@@ -36,7 +36,7 @@ public class GameSetup : MonoBehaviour
 	void SetupTiles()
 	{
 		Vector3 startPos = GetTileXStartCentered(_tileWidth, _tilesPerRow);
-		startPos.y = _tilesY;
+		startPos.y = tilesY;
 
 		//get randomised valid positions
 		List<char> randomLetters = new List<char>();
@@ -69,7 +69,7 @@ public class GameSetup : MonoBehaviour
 		_answerSlots = new Slot[_answer.Length];
 
 		Vector3 startPos = GetTileXStartCentered(_tileWidth, Mathf.Min(_tilesPerRow, _answer.Length));
-		startPos.y = _slotsY;
+		startPos.y = slotsY;
 
 		int index = 0;
 		Vector3 position = Vector3.zero;
