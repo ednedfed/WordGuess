@@ -71,7 +71,7 @@ public class LevelSelect : MonoBehaviour
 			levelButtonObject.transform.position = position;
 
 			LevelSelectButton levelSelectButton = levelButtonObject.GetComponent<LevelSelectButton> ();
-			levelSelectButton.levelInfo = levels [i];
+			levelSelectButton.levelInfo = levels[i];
 			levelSelectButton.text.text = "LEVEL " + i.ToString ();
 		}
 	}

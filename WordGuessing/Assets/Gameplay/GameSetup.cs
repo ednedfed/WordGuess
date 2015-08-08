@@ -5,13 +5,12 @@ using System.Collections;
 
 public class GameSetup : MonoBehaviour
 {
-	public string _answer = "TITBAG";
+	public string answer = "TITBAG";
 	
 	public GameObject tilePrefab;
 	public GameObject slotPrefab;
 
 	public int tilesPerRow = 7;
-	
 	public float tileWidth = 0.22f;
 
 	public float slotsY = -0.2f;
@@ -28,10 +27,9 @@ public class GameSetup : MonoBehaviour
 	void Awake()
 	{
 		if(TransitionData.levelInfo.answer != null)
-			_answer = TransitionData.levelInfo.answer;
+			answer = TransitionData.levelInfo.answer;
 
-		_answerManager = new AnswerManager(_answer);
-
+		_answerManager = new AnswerManager(answer);
 		_answerManager.onWon += OnWon;
 
 		SetupSlots();
@@ -47,10 +45,10 @@ public class GameSetup : MonoBehaviour
 		//get randomised valid positions
 		List<char> randomLetters = new List<char>();
 		
-		for(int i=0; i<_answer.Length; ++i)
-			randomLetters.Add(_answer[i]);
+		for(int i=0; i<answer.Length; ++i)
+			randomLetters.Add(answer[i]);
 		
-		int requiredLetters = Mathf.CeilToInt((float)_answer.Length / tilesPerRow) * tilesPerRow;
+		int requiredLetters = Mathf.CeilToInt((float)answer.Length / tilesPerRow) * tilesPerRow;
 		for(int i=randomLetters.Count; i<requiredLetters; ++i)
 			randomLetters.Add(RandomLetter.GetRandomLetter());
 		
@@ -58,7 +56,7 @@ public class GameSetup : MonoBehaviour
 		
 		int index = 0;
 		Vector3 position = Vector3.zero;
-		while(index < _answer.Length)
+		while(index < answer.Length)
 		{
 			for(int x=0; x<tilesPerRow; ++x)
 			{
@@ -72,14 +70,14 @@ public class GameSetup : MonoBehaviour
 	
 	void SetupSlots()
 	{
-		_answerSlots = new Slot[_answer.Length];
+		_answerSlots = new Slot[answer.Length];
 
-		Vector3 startPos = GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, _answer.Length));
+		Vector3 startPos = GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
 		startPos.y = slotsY;
 
 		int index = 0;
 		Vector3 position = Vector3.zero;
-		while(index < _answer.Length)
+		while(index < answer.Length)
 		{
 			for(int x=0; x<tilesPerRow; ++x)
 			{
@@ -88,7 +86,7 @@ public class GameSetup : MonoBehaviour
 				
 				CreateAnswerSlot(index++, position);
 
-				if(index >= _answer.Length)
+				if(index >= answer.Length)
 					break;
 			}
 		}
@@ -139,8 +137,11 @@ public class GameSetup : MonoBehaviour
 		_answerSlots[index] = slot.GetComponent<Slot>();
 	}
 
-	void OnWon()
+	void OnWon(string answer)
 	{
+		SaveData.AddToCompleted(answer);
+		SaveData.Save();
+
 		StartCoroutine(LoadLevelAfterDelay(0.2f, wonSceneName));
 	}
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AnswerManager : IDisposable
 {
-	public event Action onWon = null;
+	public event Action<string> onWon = null;
 
 	DraggableObject[] _answer;
 	string _desiredAnswer;
@@ -34,7 +34,7 @@ public class AnswerManager : IDisposable
 		if(CheckWin() == true)
 		{
 			if(onWon != null)
-				onWon();
+				onWon(_desiredAnswer);
 		}
 	}
 

@@ -55,6 +55,7 @@
      <Compile Include="Assets\LevelSelect\LevelSelect.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelectButton.cs" />
      <Compile Include="Assets\LevelSelect\TransitionData.cs" />
+     <Compile Include="Assets\Persistence\SaveData.cs" />
      <Compile Include="Assets\SlotPool.cs" />
      <Compile Include="Assets\Utilities\RandomLetter.cs" />
      <Compile Include="Assets\Utilities\RandomShuffle.cs" />
