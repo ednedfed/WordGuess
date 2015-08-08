@@ -35,7 +35,7 @@ public class LevelSelect : MonoBehaviour
 	{
 		try
 		{
-			throw new Exception();
+//			throw new Exception();
 
 			List<LevelInfo> loadedLevels = new List<LevelInfo>();
 

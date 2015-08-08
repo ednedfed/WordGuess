@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Collections;
 
 public class GameSetup : MonoBehaviour
 {
@@ -9,9 +10,14 @@ public class GameSetup : MonoBehaviour
 	public GameObject tilePrefab;
 	public GameObject slotPrefab;
 
-	public int _tilesPerRow = 7;
+	public int tilesPerRow = 7;
 	
-	public float _tileWidth = 0.22f;
+	public float tileWidth = 0.22f;
+
+	public float slotsY = -0.2f;
+	public float tilesY = -0.7f;
+
+	public string wonSceneName;
 
 	AnswerManager _answerManager;
 
@@ -19,14 +25,14 @@ public class GameSetup : MonoBehaviour
 	SlotPool _slotPool = new SlotPool();
 	SlotPool _answerSlotPool = new SlotPool();
 	
-	public float slotsY = -0.2f;
-	public float tilesY = -0.7f;
-	
 	void Awake()
 	{
-		_answer = TransitionData.levelInfo.answer;
+		if(TransitionData.levelInfo.answer != null)
+			_answer = TransitionData.levelInfo.answer;
 
 		_answerManager = new AnswerManager(_answer);
+
+		_answerManager.onWon += OnWon;
 
 		SetupSlots();
 		
@@ -35,7 +41,7 @@ public class GameSetup : MonoBehaviour
 	
 	void SetupTiles()
 	{
-		Vector3 startPos = GetTileXStartCentered(_tileWidth, _tilesPerRow);
+		Vector3 startPos = GetTileXStartCentered(tileWidth, tilesPerRow);
 		startPos.y = tilesY;
 
 		//get randomised valid positions
@@ -44,7 +50,7 @@ public class GameSetup : MonoBehaviour
 		for(int i=0; i<_answer.Length; ++i)
 			randomLetters.Add(_answer[i]);
 		
-		int requiredLetters = Mathf.CeilToInt((float)_answer.Length / _tilesPerRow) * _tilesPerRow;
+		int requiredLetters = Mathf.CeilToInt((float)_answer.Length / tilesPerRow) * tilesPerRow;
 		for(int i=randomLetters.Count; i<requiredLetters; ++i)
 			randomLetters.Add(RandomLetter.GetRandomLetter());
 		
@@ -54,10 +60,10 @@ public class GameSetup : MonoBehaviour
 		Vector3 position = Vector3.zero;
 		while(index < _answer.Length)
 		{
-			for(int x=0; x<_tilesPerRow; ++x)
+			for(int x=0; x<tilesPerRow; ++x)
 			{
-				position.x = startPos.x + _tileWidth*x;
-				position.y = startPos.y - _tileWidth*Mathf.FloorToInt(index/_tilesPerRow);
+				position.x = startPos.x + tileWidth*x;
+				position.y = startPos.y - tileWidth*Mathf.FloorToInt(index/tilesPerRow);
 				
 				CreateTileWithSlot(randomLetters[index++], position);
 			}
@@ -68,17 +74,17 @@ public class GameSetup : MonoBehaviour
 	{
 		_answerSlots = new Slot[_answer.Length];
 
-		Vector3 startPos = GetTileXStartCentered(_tileWidth, Mathf.Min(_tilesPerRow, _answer.Length));
+		Vector3 startPos = GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, _answer.Length));
 		startPos.y = slotsY;
 
 		int index = 0;
 		Vector3 position = Vector3.zero;
 		while(index < _answer.Length)
 		{
-			for(int x=0; x<_tilesPerRow; ++x)
+			for(int x=0; x<tilesPerRow; ++x)
 			{
-				position.x = startPos.x + _tileWidth*x;
-				position.y = startPos.y - _tileWidth*Mathf.FloorToInt(index/_tilesPerRow);
+				position.x = startPos.x + tileWidth*x;
+				position.y = startPos.y - tileWidth*Mathf.FloorToInt(index/tilesPerRow);
 				
 				CreateAnswerSlot(index++, position);
 
@@ -131,5 +137,17 @@ public class GameSetup : MonoBehaviour
 		_answerSlotPool.AddSlot(slot.GetComponent<Slot>());
 
 		_answerSlots[index] = slot.GetComponent<Slot>();
+	}
+
+	void OnWon()
+	{
+		StartCoroutine(LoadLevelAfterDelay(0.2f, wonSceneName));
+	}
+
+	IEnumerator LoadLevelAfterDelay(float seconds, string levelName)
+	{
+		yield return new WaitForSeconds(seconds);
+
+		Application.LoadLevel(wonSceneName);
 	}
 }

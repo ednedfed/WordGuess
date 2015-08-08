@@ -1,8 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-public class AnswerManager
+public class AnswerManager : IDisposable
 {
+	public event Action onWon = null;
+
 	DraggableObject[] _answer;
 	string _desiredAnswer;
 
@@ -29,7 +31,11 @@ public class AnswerManager
 			_earliestFreeSlot++;
 		}
 
-		HasWon();
+		if(CheckWin() == true)
+		{
+			if(onWon != null)
+				onWon();
+		}
 	}
 
 	public void RemoveLetter(DraggableObject letter)
@@ -46,7 +52,7 @@ public class AnswerManager
 		}
 	}
 
-	public bool HasWon()
+	public bool CheckWin()
 	{
 		for(int i=0; i<_answer.Length; ++i)
 		{
@@ -60,5 +66,12 @@ public class AnswerManager
 		Debug.Log("WWWWWOOOOOOOONNNNNNNNN");
 
 		return true;
+	}
+
+	public void Dispose()
+	{
+		onWon = null;
+		
+		_answer = null;
 	}
 }
