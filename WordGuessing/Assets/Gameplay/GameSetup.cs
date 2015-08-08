@@ -6,7 +6,8 @@ using System.Collections;
 public class GameSetup : MonoBehaviour
 {
 	public string answer = "TITBAG";
-	
+	public RawImage image;
+
 	public GameObject tilePrefab;
 	public GameObject slotPrefab;
 
@@ -17,7 +18,7 @@ public class GameSetup : MonoBehaviour
 	public float tilesY = -0.7f;
 
 	public string wonSceneName;
-
+	
 	AnswerManager _answerManager;
 
 	Slot[] _answerSlots;
@@ -27,7 +28,10 @@ public class GameSetup : MonoBehaviour
 	void Awake()
 	{
 		if(TransitionData.levelInfo.answer != null)
+		{
 			answer = TransitionData.levelInfo.answer;
+			image.texture = Resources.Load(TransitionData.levelInfo.image) as Texture;
+		}
 
 		_answerManager = new AnswerManager(answer);
 		_answerManager.onWon += OnWon;

@@ -48,7 +48,6 @@
   <ItemGroup>
      <Compile Include="Assets\Gameplay\AnswerManager.cs" />
      <Compile Include="Assets\Gameplay\GameSetup.cs" />
-     <Compile Include="Assets\ImageSetter.cs" />
      <Compile Include="Assets\IngameObjects\BackButton.cs" />
      <Compile Include="Assets\IngameObjects\DraggableObject.cs" />
      <Compile Include="Assets\IngameObjects\Slot.cs" />
