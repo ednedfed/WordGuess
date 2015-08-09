@@ -19,6 +19,11 @@ public class AnswerManager : IDisposable
 		_earliestFreeSlot = 0;
 	}
 
+	public void ListenTo(DraggableObject letter)
+	{
+		letter.Register(AddLetter, RemoveLetter);//need to unregister later
+	}
+
 	public void AddLetter(DraggableObject letter)
 	{
 		_answer[_earliestFreeSlot] = letter;

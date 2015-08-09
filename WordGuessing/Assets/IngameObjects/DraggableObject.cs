@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 public class DraggableObject : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class DraggableObject : MonoBehaviour
 	SlotPool _currentSlotPool;
 	SlotPool _nextSlotPool;
 
-	AnswerManager _answerManager;
+	event Action<DraggableObject> _onLetterAdded;
+	event Action<DraggableObject> _onLetterRemoved;
 
 	void Awake()
 	{
@@ -25,9 +27,16 @@ public class DraggableObject : MonoBehaviour
 		character = char.Parse(myText.text);
 	}
 
-	public void SetAnswerManager(AnswerManager answerManager)
+	public void Register(Action<DraggableObject> onLetterAdded, Action<DraggableObject> onLetterRemoved)
 	{
-		_answerManager = answerManager;
+		_onLetterAdded += onLetterAdded;
+		_onLetterRemoved += onLetterRemoved;
+	}
+
+	public void Unregister(Action<DraggableObject> onLetterAdded, Action<DraggableObject> onLetterRemoved)
+	{
+		_onLetterAdded -= onLetterAdded;
+		_onLetterRemoved -= onLetterRemoved;
 	}
 
 	public void SetSlot(Slot slot)
@@ -51,9 +60,15 @@ public class DraggableObject : MonoBehaviour
 		_nextSlotPool = tempPool;
 
 		if(_currentSlotPool == _answerSlotPool)
-			_answerManager.AddLetter(this);
+		{
+			if(_onLetterAdded != null)
+				_onLetterAdded(this);
+		}
 		else
-			_answerManager.RemoveLetter(this);
+		{
+			if(_onLetterRemoved != null)
+				_onLetterRemoved(this);
+		}
 	}
 
 	void OnMouseDown()
