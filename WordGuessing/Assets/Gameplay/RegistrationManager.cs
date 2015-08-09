@@ -7,8 +7,7 @@ public class RegistrationManager : MonoBehaviour
 {
 	public string answer = "        ";
 	public string tiles = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-//	public RawImage image;
-	
+
 	public GameObject tilePrefab;
 	public GameObject slotPrefab;
 	
@@ -17,15 +16,28 @@ public class RegistrationManager : MonoBehaviour
 	
 	public float slotsY = -0.2f;
 	public float tilesY = -0.7f;
-	
-//	AnswerManager _answerManager;
+
 	SlotFactory _slotFactory;
 	
 	SlotPool _slotPool = new SlotPool();
 	SlotPool _answerSlotPool = new SlotPool();
-	
+
+	NameInputManager _nameInputManager;
+
+	public void Submit()
+	{
+		string username = _nameInputManager.GetString();
+
+		TransitionData.SetUsername(username);
+		SaveData.Save();
+
+		Debug.Log(username);
+	}
+
 	void Awake()
 	{
+		_nameInputManager = new NameInputManager(answer);
+
 		_slotFactory = new SlotFactory(tilePrefab, slotPrefab, _slotPool, _answerSlotPool);
 		
 		SetupSlots();
@@ -35,7 +47,7 @@ public class RegistrationManager : MonoBehaviour
 	
 	void SetupTiles()
 	{
-		Vector3 startPos = GetTileXStartCentered(tileWidth, tilesPerRow);
+		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, tilesPerRow);
 		startPos.y = tilesY;
 
 		Vector3 position = Vector3.zero;
@@ -44,13 +56,17 @@ public class RegistrationManager : MonoBehaviour
 			position.x = startPos.x + tileWidth*(i%tilesPerRow);
 			position.y = startPos.y - tileWidth*Mathf.FloorToInt(i/tilesPerRow);
 				
-			_slotFactory.CreateTileWithSlot(tiles[i], position);
+			LetterButton letterButton = _slotFactory.CreateTileWithSlot(tiles[i], position) as LetterButton;
+			letterButton.slotFactory = _slotFactory;
+			letterButton.nameInputManager = _nameInputManager;
+
+			_nameInputManager.ListenTo(letterButton);
 		}
 	}
 	
 	void SetupSlots()
 	{
-		Vector3 startPos = GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
+		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
 		startPos.y = slotsY;
 		
 		int index = 0;
@@ -69,15 +85,5 @@ public class RegistrationManager : MonoBehaviour
 					break;
 			}
 		}
-	}
-	
-	Vector3 GetTileXStartCentered(float tileWidth, int numTiles)
-	{
-		float screenHorizontalCenter = Screen.width * 0.5f;
-		Vector3 screenCenter = Camera.main.ScreenToWorldPoint (new Vector3 (screenHorizontalCenter, 0f, 0f));
-		float offset = screenCenter.x - (tileWidth * (numTiles-1) * 0.5f);
-		Vector3 startPos = new Vector3(offset, 0, 0);
-		
-		return startPos;
 	}
 }

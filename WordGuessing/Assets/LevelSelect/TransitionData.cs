@@ -18,7 +18,18 @@ public static class TransitionData
 
 	public static LevelInfo[] Levels;
 
-	static int _currentId = 0;
+	static int _currentId;
+	static string _username;
+
+	public static void SetUsername(string username)
+	{
+		_username = username;
+	}
+
+	public static string GetUsername()
+	{
+		return _username;
+	}
 
 	public static void SetCurrentLevel(int newId)
 	{

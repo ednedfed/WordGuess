@@ -48,22 +48,26 @@
   <ItemGroup>
      <Compile Include="Assets\Gameplay\AnswerManager.cs" />
      <Compile Include="Assets\Gameplay\GameSetup.cs" />
+     <Compile Include="Assets\Gameplay\NameInputManager.cs" />
+     <Compile Include="Assets\Gameplay\RegistrationManager.cs" />
+     <Compile Include="Assets\Gameplay\SlotFactory.cs" />
+     <Compile Include="Assets\Gameplay\SlotPool.cs" />
      <Compile Include="Assets\IngameObjects\BackButton.cs" />
      <Compile Include="Assets\IngameObjects\DraggableObject.cs" />
+     <Compile Include="Assets\IngameObjects\LetterButton.cs" />
      <Compile Include="Assets\IngameObjects\NextButton.cs" />
      <Compile Include="Assets\IngameObjects\Slot.cs" />
+     <Compile Include="Assets\IngameObjects\SubmitButton.cs" />
      <Compile Include="Assets\LevelSelect\LevelNames.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelect.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelectButton.cs" />
      <Compile Include="Assets\LevelSelect\TransitionData.cs" />
      <Compile Include="Assets\Persistence\SaveData.cs" />
-     <Compile Include="Assets\RegistrationManager.cs" />
-     <Compile Include="Assets\SlotFactory.cs" />
-     <Compile Include="Assets\SlotPool.cs" />
      <Compile Include="Assets\Utilities\LoadLevelAfterDelay.cs" />
      <Compile Include="Assets\Utilities\RandomLetter.cs" />
      <Compile Include="Assets\Utilities\RandomShuffle.cs" />
      <Compile Include="Assets\Utilities\SortingLayers.cs" />
+     <Compile Include="Assets\Utilities\TileLayoutUtilities.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

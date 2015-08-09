@@ -43,7 +43,7 @@ public class GameSetup : MonoBehaviour
 	
 	void SetupTiles()
 	{
-		Vector3 startPos = GetTileXStartCentered(tileWidth, tilesPerRow);
+		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, tilesPerRow);
 		startPos.y = tilesY;
 
 		//get randomised valid positions
@@ -76,7 +76,7 @@ public class GameSetup : MonoBehaviour
 	
 	void SetupSlots()
 	{
-		Vector3 startPos = GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
+		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
 		startPos.y = slotsY;
 
 		int index = 0;
@@ -95,16 +95,6 @@ public class GameSetup : MonoBehaviour
 					break;
 			}
 		}
-	}
-	
-	Vector3 GetTileXStartCentered(float tileWidth, int numTiles)
-	{
-		float screenHorizontalCenter = Screen.width * 0.5f;
-		Vector3 screenCenter = Camera.main.ScreenToWorldPoint (new Vector3 (screenHorizontalCenter, 0f, 0f));
-		float offset = screenCenter.x - (tileWidth * (numTiles-1) * 0.5f);
-		Vector3 startPos = new Vector3(offset, 0, 0);
-		
-		return startPos;
 	}
 
 	void OnWon(string answer)

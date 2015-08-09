@@ -10,16 +10,16 @@ public class DraggableObject : MonoBehaviour
 
 	public char character;
 
-	Slot _mySlot;
+	protected Slot _mySlot;
 
-	SlotPool _slotPool;
-	SlotPool _answerSlotPool;
+	protected SlotPool _slotPool;
+	protected SlotPool _answerSlotPool;
 
-	SlotPool _currentSlotPool;
-	SlotPool _nextSlotPool;
+	protected SlotPool _currentSlotPool;
+	protected SlotPool _nextSlotPool;
 
-	event Action<DraggableObject> _onLetterAdded;
-	event Action<DraggableObject> _onLetterRemoved;
+	protected event Action<DraggableObject> _onLetterAdded;
+	protected event Action<DraggableObject> _onLetterRemoved;
 
 	void Awake()
 	{
@@ -53,7 +53,7 @@ public class DraggableObject : MonoBehaviour
 		_nextSlotPool = _answerSlotPool;
 	}
 
-	void SwapCurrentSlotPool()
+	protected void SwapCurrentSlotPool()
 	{
 		SlotPool tempPool = _currentSlotPool;
 		_currentSlotPool = _nextSlotPool;
@@ -71,7 +71,7 @@ public class DraggableObject : MonoBehaviour
 		}
 	}
 
-	void OnMouseDown()
+	protected virtual void OnMouseDown()
 	{
 		//Debug.Log("On Mouse Up");
 		if(_nextSlotPool.IsFull())

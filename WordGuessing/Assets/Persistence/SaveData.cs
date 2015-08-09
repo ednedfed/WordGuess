@@ -47,6 +47,11 @@ public static class SaveData
 
 			foreach (XmlNode node in document.DocumentElement.ChildNodes)
 			{
+				if(node.Name == "username")
+				{
+					TransitionData.SetUsername(node.InnerText);
+				}
+
 				string currentLevel = node.Name;
 
 				_completedLevels.Add(currentLevel);
@@ -65,9 +70,13 @@ public static class SaveData
 			XmlDocument document = new XmlDocument();
 			XmlNode rootNode = document.CreateElement("completedLevels");
 
+			XmlNode node = document.CreateElement("username");
+			node.InnerText = TransitionData.GetUsername();
+			rootNode.AppendChild(node);
+
 			foreach (string answer in _completedLevels)
 			{
-				XmlNode node = document.CreateElement(answer);
+				node = document.CreateElement(answer);
 
 				rootNode.AppendChild(node);
 			}

@@ -43,6 +43,23 @@ public class SlotFactory
 		return draggableObject;
 	}
 
+	public DraggableObject CreateTile(char character, Vector3 position)
+	{
+		GameObject tile = Object.Instantiate(_tilePrefab) as GameObject;
+
+		position.z = -1f;
+		tile.transform.position = position;
+		
+		DraggableObject draggableObject = tile.GetComponent<DraggableObject>();
+		draggableObject.character = character;
+		draggableObject.SetSlotPools(_slotPool, _answerSlotPool);
+		
+		Text text = tile.GetComponentInChildren<Text>();
+		text.text = character.ToString();
+		
+		return draggableObject;
+	}
+
 	public void CreateAnswerSlot(Vector3 position)
 	{
 		GameObject slot = Object.Instantiate(_slotPrefab) as GameObject;
