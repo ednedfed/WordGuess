@@ -17,8 +17,6 @@ public class GameSetup : MonoBehaviour
 	public float slotsY = -0.2f;
 	public float tilesY = -0.7f;
 
-	public string wonSceneName;
-	
 	AnswerManager _answerManager;
 
 	Slot[] _answerSlots;
@@ -27,10 +25,10 @@ public class GameSetup : MonoBehaviour
 	
 	void Awake()
 	{
-		if(TransitionData.levelInfo.answer != null)
+		if(TransitionData.CurrentLevel.answer != null)
 		{
-			answer = TransitionData.levelInfo.answer;
-			image.texture = Resources.Load(TransitionData.levelInfo.image) as Texture;
+			answer = TransitionData.CurrentLevel.answer;
+			image.texture = Resources.Load(TransitionData.CurrentLevel.image) as Texture;
 		}
 
 		_answerManager = new AnswerManager(answer);
@@ -146,13 +144,6 @@ public class GameSetup : MonoBehaviour
 		SaveData.AddToCompleted(answer);
 		SaveData.Save();
 
-		StartCoroutine(LoadLevelAfterDelay(0.2f, wonSceneName));
-	}
-
-	IEnumerator LoadLevelAfterDelay(float seconds, string levelName)
-	{
-		yield return new WaitForSeconds(seconds);
-
-		Application.LoadLevel(wonSceneName);
+		StartCoroutine(LoadLevelAfterDelay.Execute(0.2f, LevelNames.Complete));
 	}
 }

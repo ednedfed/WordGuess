@@ -20,8 +20,6 @@ public class LevelSelect : MonoBehaviour
 	
 	public GameObject levelButtonPrefab;
 
-	public LevelInfo[] levels;
-
 	public string fileName;
 
 	void Awake()
@@ -52,7 +50,7 @@ public class LevelSelect : MonoBehaviour
 				loadedLevels.Add(levelInfo);
 			}
 
-			levels = loadedLevels.ToArray();
+			TransitionData.Levels = loadedLevels.ToArray();
 		}
 		catch(Exception e)
 		{
@@ -63,16 +61,17 @@ public class LevelSelect : MonoBehaviour
 	void CreateLevelButtons()
 	{
 		//set up buttons with levels
-		for (int i = 0; i < levels.Length; ++i)
+		for (int i = 0; i < TransitionData.Levels.Length; ++i)
 		{
 			GameObject levelButtonObject = UnityEngine.Object.Instantiate(levelButtonPrefab) as GameObject;
 
-			Vector3 position = new Vector3 (xOffset, (levels.Length - i) * yOffset + startY, 0f);
+			Vector3 position = new Vector3 (xOffset, (TransitionData.Levels.Length - i) * yOffset + startY, 0f);
 			levelButtonObject.transform.position = position;
 
-			LevelSelectButton levelSelectButton = levelButtonObject.GetComponent<LevelSelectButton> ();
-			levelSelectButton.levelInfo = levels[i];
+			LevelSelectButton levelSelectButton = levelButtonObject.GetComponent<LevelSelectButton>();
+			levelSelectButton.isCompleted = SaveData.IsCompleted(TransitionData.Levels[i].answer);
 			levelSelectButton.text.text = "LEVEL " + i.ToString ();
+			levelSelectButton.id = i;
 		}
 	}
 }

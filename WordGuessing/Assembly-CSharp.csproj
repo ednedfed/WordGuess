@@ -50,12 +50,15 @@
      <Compile Include="Assets\Gameplay\GameSetup.cs" />
      <Compile Include="Assets\IngameObjects\BackButton.cs" />
      <Compile Include="Assets\IngameObjects\DraggableObject.cs" />
+     <Compile Include="Assets\IngameObjects\NextButton.cs" />
      <Compile Include="Assets\IngameObjects\Slot.cs" />
+     <Compile Include="Assets\LevelSelect\LevelNames.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelect.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelectButton.cs" />
      <Compile Include="Assets\LevelSelect\TransitionData.cs" />
      <Compile Include="Assets\Persistence\SaveData.cs" />
      <Compile Include="Assets\SlotPool.cs" />
+     <Compile Include="Assets\Utilities\LoadLevelAfterDelay.cs" />
      <Compile Include="Assets\Utilities\RandomLetter.cs" />
      <Compile Include="Assets\Utilities\RandomShuffle.cs" />
      <Compile Include="Assets\Utilities\SortingLayers.cs" />

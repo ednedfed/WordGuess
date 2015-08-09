@@ -5,6 +5,6 @@ public class BackButton : MonoBehaviour
 {
 	void OnMouseUp()
 	{
-		Application.LoadLevel("LevelSelect");
+		Application.LoadLevel(LevelNames.LevelSelect);
 	}
 }

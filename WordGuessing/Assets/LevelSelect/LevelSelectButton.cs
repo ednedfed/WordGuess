@@ -6,19 +6,18 @@ public class LevelSelectButton : MonoBehaviour
 	public GameObject completedIcon;
 
 	public Text text;
-	public LevelInfo levelInfo;
+	public bool isCompleted;
+	public int id;
 
 	void Start()
 	{
-		bool isCompleted = SaveData.IsCompleted(levelInfo.answer);
-
 		completedIcon.SetActive(isCompleted);
 	}
 
 	void OnMouseUp()
 	{
-		TransitionData.levelInfo = this.levelInfo;
+		TransitionData.SetCurrentLevel(this.id);
 
-		Application.LoadLevel("scene1");
+		Application.LoadLevel(LevelNames.Gameplay);
 	}
 }
