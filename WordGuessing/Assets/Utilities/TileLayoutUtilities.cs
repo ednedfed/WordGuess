@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class TileLayoutUtilities
 {
-	public static Vector3 GetTileXStartCentered(float tileWidth, int numTiles)
+	public static Vector3 GetCenteredTileStartPosX(float tileWidth, int numTiles)
 	{
 		float screenHorizontalCenter = Screen.width * 0.5f;
 		Vector3 screenCenter = Camera.main.ScreenToWorldPoint (new Vector3 (screenHorizontalCenter, 0f, 0f));

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class SlotFactory
 {
@@ -18,54 +19,37 @@ public class SlotFactory
 		_answerSlotPool = answerSlotPool;
 	}
 
-	public DraggableObject CreateTileWithSlot(char character, Vector3 position)
+	public DraggableObject CreateTile(char character, Vector3 position)
 	{
-		GameObject tile = Object.Instantiate(_tilePrefab) as GameObject;
-		GameObject slot = Object.Instantiate(_slotPrefab) as GameObject;
-		
-		slot.transform.position = position;
-		
+		GameObject tile = UnityEngine.Object.Instantiate(_tilePrefab) as GameObject;
+
 		position.z = -1f;
 		tile.transform.position = position;
-		
-		_slotPool.AddSlot(slot.GetComponent<Slot>());
 		
 		DraggableObject draggableObject = tile.GetComponent<DraggableObject>();
 		draggableObject.character = character;
 		draggableObject.SetSlotPools(_slotPool, _answerSlotPool);
-		
+
+		if(draggableObject is LetterButton)
+			(draggableObject as LetterButton).slotFactory = this;
+
 		Text text = tile.GetComponentInChildren<Text>();
 		text.text = character.ToString();
-		
-		draggableObject.SetSlot(slot.GetComponent<Slot>());
-		_slotPool.SetUsed(slot.GetComponent<Slot>());
 
 		return draggableObject;
 	}
 
-	public DraggableObject CreateTile(char character, Vector3 position)
+	public void CreateSlot(Vector3 position)
 	{
-		GameObject tile = Object.Instantiate(_tilePrefab) as GameObject;
-
-		position.z = -1f;
-		tile.transform.position = position;
-		
-		DraggableObject draggableObject = tile.GetComponent<DraggableObject>();
-		draggableObject.character = character;
-		draggableObject.SetSlotPools(_slotPool, _answerSlotPool);
-		
-		Text text = tile.GetComponentInChildren<Text>();
-		text.text = character.ToString();
-		
-		return draggableObject;
+		GameObject slot = UnityEngine.Object.Instantiate (_slotPrefab) as GameObject;
+		slot.transform.position = position;
+		_slotPool.AddSlot (slot.GetComponent<Slot> ());
 	}
 
 	public void CreateAnswerSlot(Vector3 position)
 	{
-		GameObject slot = Object.Instantiate(_slotPrefab) as GameObject;
-		
+		GameObject slot = UnityEngine.Object.Instantiate(_slotPrefab) as GameObject;
 		slot.transform.position = position;
-		
 		_answerSlotPool.AddSlot(slot.GetComponent<Slot>());
 	}
 }

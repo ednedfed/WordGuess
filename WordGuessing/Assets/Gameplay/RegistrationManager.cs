@@ -24,67 +24,31 @@ public class RegistrationManager : MonoBehaviour
 
 	NameInputManager _nameInputManager;
 
+	TileLayoutCreator _tileLayoutCreator;
+	AnswerSlotLayoutCreator _answerSlotLayoutCreator;
+
 	public void SubmitUsername()
 	{
-		string username = _nameInputManager.GetString();
+		string enteredUsername = _nameInputManager.GetString();
 
-		TransitionData.SetUsername(username);
+		TransitionData.SetUsername(enteredUsername);
 
 		SaveData.LoadDataForCurrentUser();
 
-		Debug.Log(username);
+		Debug.Log(enteredUsername);
 	}
 
 	void Awake()
 	{
 		_nameInputManager = new NameInputManager(answer);
+		_nameInputManager.ListenTo(_answerSlotPool);
 
 		_slotFactory = new SlotFactory(tilePrefab, slotPrefab, _slotPool, _answerSlotPool);
-		
-		SetupSlots();
-		
-		SetupTiles();
-	}
-	
-	void SetupTiles()
-	{
-		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, tilesPerRow);
-		startPos.y = tilesY;
 
-		Vector3 position = Vector3.zero;
-		for(int i=0; i<tiles.Length; ++i)
-		{
-			position.x = startPos.x + tileWidth*(i%tilesPerRow);
-			position.y = startPos.y - tileWidth*Mathf.FloorToInt(i/tilesPerRow);
-				
-			LetterButton letterButton = _slotFactory.CreateTileWithSlot(tiles[i], position) as LetterButton;
-			letterButton.slotFactory = _slotFactory;
-			letterButton.nameInputManager = _nameInputManager;
+		_answerSlotLayoutCreator = new AnswerSlotLayoutCreator(tileWidth, tilesPerRow, slotsY, _slotFactory);
+		_tileLayoutCreator = new TileLayoutCreator(tileWidth, tilesPerRow, tilesY, _slotFactory);
 
-			_nameInputManager.ListenTo(letterButton);
-		}
-	}
-	
-	void SetupSlots()
-	{
-		Vector3 startPos = TileLayoutUtilities.GetTileXStartCentered(tileWidth, Mathf.Min(tilesPerRow, answer.Length));
-		startPos.y = slotsY;
-		
-		int index = 0;
-		Vector3 position = Vector3.zero;
-		while(index < answer.Length)
-		{
-			for(int x=0; x<tilesPerRow; ++x)
-			{
-				position.x = startPos.x + tileWidth*x;
-				position.y = startPos.y - tileWidth*Mathf.FloorToInt(index/tilesPerRow);
-				
-				_slotFactory.CreateAnswerSlot(position);
-				
-				index++;
-				if(index >= answer.Length)
-					break;
-			}
-		}
+		_answerSlotLayoutCreator.CreateAnswerSlotLayout(answer.Length);
+		_tileLayoutCreator.CreateTileLayout(tiles);
 	}
 }

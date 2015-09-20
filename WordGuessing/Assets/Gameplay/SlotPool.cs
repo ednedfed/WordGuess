@@ -1,13 +1,18 @@
 using System.Collections.Generic;
+using UnityEngine;
+using System;
 
 public class SlotPool
 {
 	List<Slot> _slots = new List<Slot>();
-	HashSet<int> _usedSlots = new HashSet<int>();
+	int _usedSlotCount = 0;
+
+	public event Action<DraggableObject> OnTileAdded;
+	public event Action<DraggableObject> OnTileRemoved;
 
 	public bool IsFull()
 	{
-		return _usedSlots.Count == _slots.Count;
+		return _usedSlotCount == _slots.Count;
 	}
 
 	public void AddSlot(Slot slot)
@@ -15,32 +20,43 @@ public class SlotPool
 		_slots.Add(slot);
 	}
 
-	public void SetUsed(Slot slot)
+	public void AddToNextFreeSlot(DraggableObject draggableObject)
 	{
 		for(int i=0; i<_slots.Count; ++i)
 		{
-			if(_slots[i] == slot)
-				_usedSlots.Add(i);
+			if(_slots[i].draggableObject == null)
+			{
+				_slots[i].draggableObject = draggableObject;
+				_usedSlotCount++;
+
+				Vector3 newPos = _slots[i].transform.position;
+				newPos.z = -1f;
+				draggableObject.transform.position = newPos;
+
+				Debug.Log("setting pos: " + draggableObject.character + " " + draggableObject.transform.position.ToString());
+
+				if(OnTileAdded != null)
+					OnTileAdded(draggableObject);
+
+				break;
+			}
 		}
 	}
 
-	public void SetFree(Slot slot)
+	public void RemoveFromSlot(DraggableObject draggableObject)
 	{
 		for(int i=0; i<_slots.Count; ++i)
 		{
-			if(_slots[i] == slot)
-				_usedSlots.Remove(i);
-		}
-	}
+			if(_slots[i].draggableObject == draggableObject)
+			{
+				_slots[i].draggableObject = null;
+				_usedSlotCount--;
 
-	public Slot GetNextFreeSlot()
-	{
-		for(int i=0; i<_slots.Count; ++i)
-		{
-			if(_usedSlots.Contains(i) == false)
-				return _slots[i];
-		}
+				if(OnTileRemoved != null)
+					OnTileRemoved(draggableObject);
 
-		return null;
+				break;
+			}
+		}
 	}
 }

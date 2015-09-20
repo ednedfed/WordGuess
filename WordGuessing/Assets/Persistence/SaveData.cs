@@ -1,29 +1,23 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using UnityEngine;
 
-/// <summary>
-/// Save data.
-/// 
-/// singleton currently, until we work out a system for preserving this data between transitions
-/// 
-/// contains which levels we have completed
-/// </summary>
-using System;
-using System.IO;
-
 public static class SaveData
 {
+	const string COMPLETED_LEVELS_NODE_NAME = "completedLevels";
+
 	static HashSet<string> _completedLevels = new HashSet<string>();
 
 	static XmlDocument _document = new XmlDocument();
 
-	public static bool IsCompleted(string answer)
+	public static bool IsLevelCompleted(string answer)
 	{
 		return _completedLevels.Contains(answer);
 	}
 
-	public static void AddToCompleted(string answer)
+	public static void AddToCompletedLevels(string answer)
 	{
 		_completedLevels.Add(answer);
 	}
@@ -39,11 +33,9 @@ public static class SaveData
 			if(File.Exists(GetSaveDataPathForUser(currentUser)) == false)
 				return;
 
-			_completedLevels.Clear();
-
 			_document.Load(GetSaveDataPathForUser(currentUser));
 
-			XmlNodeList completedLevelNodeList = _document["completedLevels"].ChildNodes;
+			XmlNodeList completedLevelNodeList = _document[COMPLETED_LEVELS_NODE_NAME].ChildNodes;
 
 			foreach(XmlNode completedLevelNode in completedLevelNodeList)
 				_completedLevels.Add(completedLevelNode.Name);
@@ -62,7 +54,7 @@ public static class SaveData
 
 			_document = new XmlDocument();
 
-			XmlElement completedLevels = _document.CreateElement("completedLevels");
+			XmlElement completedLevels = _document.CreateElement(COMPLETED_LEVELS_NODE_NAME);
 
 			foreach (string answer in _completedLevels)
 			{
@@ -81,7 +73,7 @@ public static class SaveData
 		}
 	}
 
-	public static string GetSaveDataPathForUser(string username)
+	static string GetSaveDataPathForUser(string username)
 	{
 		return Application.persistentDataPath + "\\" + username;
 	}

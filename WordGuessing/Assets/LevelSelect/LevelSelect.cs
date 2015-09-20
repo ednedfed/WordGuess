@@ -1,16 +1,9 @@
-﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
-using System.Collections.Generic;
-using System;
-
-[System.Serializable]
-public struct LevelInfo
-{
-	public string answer;
-	public string image;
-}
+using UnityEngine;
 
 public class LevelSelect : MonoBehaviour
 {
@@ -33,24 +26,7 @@ public class LevelSelect : MonoBehaviour
 	{
 		try
 		{
-//			throw new Exception();
-
-			List<LevelInfo> loadedLevels = new List<LevelInfo>();
-
-			XmlDocument document = new XmlDocument();
-			document.Load(fileName);
-
-			foreach (XmlNode node in document.DocumentElement.ChildNodes)
-			{
-				LevelInfo levelInfo = new LevelInfo();
-
-				levelInfo.answer = node.Attributes["answer"].InnerText;
-				levelInfo.image = node.Attributes["image"].InnerText;
-
-				loadedLevels.Add(levelInfo);
-			}
-
-			TransitionData.Levels = loadedLevels.ToArray();
+			TransitionData.Levels = new XmlLevelLoader(fileName).LoadLevels();
 		}
 		catch(Exception e)
 		{
@@ -60,7 +36,6 @@ public class LevelSelect : MonoBehaviour
 
 	void CreateLevelButtons()
 	{
-		//set up buttons with levels
 		for (int i = 0; i < TransitionData.Levels.Length; ++i)
 		{
 			GameObject levelButtonObject = UnityEngine.Object.Instantiate(levelButtonPrefab) as GameObject;
@@ -69,7 +44,7 @@ public class LevelSelect : MonoBehaviour
 			levelButtonObject.transform.position = position;
 
 			LevelSelectButton levelSelectButton = levelButtonObject.GetComponent<LevelSelectButton>();
-			levelSelectButton.isCompleted = SaveData.IsCompleted(TransitionData.Levels[i].answer);
+			levelSelectButton.isCompleted = SaveData.IsLevelCompleted(TransitionData.Levels[i].answer);
 			levelSelectButton.text.text = "LEVEL " + i.ToString ();
 			levelSelectButton.id = i;
 		}

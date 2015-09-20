@@ -47,11 +47,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Gameplay\AnswerManager.cs" />
+     <Compile Include="Assets\Gameplay\AnswerSlotLayoutCreator.cs" />
      <Compile Include="Assets\Gameplay\GameSetup.cs" />
      <Compile Include="Assets\Gameplay\NameInputManager.cs" />
      <Compile Include="Assets\Gameplay\RegistrationManager.cs" />
      <Compile Include="Assets\Gameplay\SlotFactory.cs" />
      <Compile Include="Assets\Gameplay\SlotPool.cs" />
+     <Compile Include="Assets\Gameplay\TileLayoutCreator.cs" />
      <Compile Include="Assets\IngameObjects\BackButton.cs" />
      <Compile Include="Assets\IngameObjects\DraggableObject.cs" />
      <Compile Include="Assets\IngameObjects\LetterButton.cs" />
@@ -59,10 +61,12 @@
      <Compile Include="Assets\IngameObjects\NextButton.cs" />
      <Compile Include="Assets\IngameObjects\Slot.cs" />
      <Compile Include="Assets\IngameObjects\SubmitButton.cs" />
+     <Compile Include="Assets\LevelSelect\LevelInfo.cs" />
      <Compile Include="Assets\LevelSelect\LevelNames.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelect.cs" />
      <Compile Include="Assets\LevelSelect\LevelSelectButton.cs" />
      <Compile Include="Assets\LevelSelect\TransitionData.cs" />
+     <Compile Include="Assets\LevelSelect\XmlLevelLoader.cs" />
      <Compile Include="Assets\Persistence\SaveData.cs" />
      <Compile Include="Assets\UserSelection\UserButton.cs" />
      <Compile Include="Assets\UserSelection\UserSelection.cs" />

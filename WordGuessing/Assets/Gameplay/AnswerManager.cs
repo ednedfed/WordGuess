@@ -3,68 +3,67 @@ using UnityEngine;
 
 public class AnswerManager : IDisposable
 {
-	public event Action<string> onWon = null;
+	Action<string> _onWon;
 
-	DraggableObject[] _answer;
+	DraggableObject[] _currentAnswer;
 	string _desiredAnswer;
 
-	int _earliestFreeSlot;
+	int _firstFreeSlotId;
 
-	public AnswerManager(string answer)
+	public AnswerManager(string answer, Action<string> onWon)
 	{
 		_desiredAnswer = answer;
+		_onWon = onWon;
 
-		_answer = new DraggableObject[answer.Length];
+		_currentAnswer = new DraggableObject[answer.Length];
 
-		_earliestFreeSlot = 0;
+		_firstFreeSlotId = 0;
 	}
 
-	public void ListenTo(DraggableObject letter)
+	public void ListenTo(SlotPool slotPool)
 	{
-		letter.Register(AddLetter, RemoveLetter);//need to unregister later
+		slotPool.OnTileAdded += AddLetter;
+		slotPool.OnTileRemoved += RemoveLetter;//need to unregister later
 	}
 
 	public void AddLetter(DraggableObject letter)
 	{
-		_answer[_earliestFreeSlot] = letter;
+		_currentAnswer[_firstFreeSlotId] = letter;
 
-		for(int i=_earliestFreeSlot; i<_answer.Length; ++i)
+		for(int i=_firstFreeSlotId; i<_currentAnswer.Length; ++i)
 		{
-			if(_answer[_earliestFreeSlot] == null)
+			if(_currentAnswer[_firstFreeSlotId] == null)
 				break;
 
-			_earliestFreeSlot++;
+			_firstFreeSlotId++;
 		}
 
-		if(CheckWin() == true)
-		{
-			if(onWon != null)
-				onWon(_desiredAnswer);
-		}
+		if(HasWon() == true)
+			_onWon(_desiredAnswer);
 	}
 
 	public void RemoveLetter(DraggableObject letter)
 	{
-		for(int i=0; i<_answer.Length; ++i)
+		for(int i=0; i<_currentAnswer.Length; ++i)
 		{
-			if(_answer[i] == letter)
+			if(_currentAnswer[i] == letter)
 			{
-				_answer[i] = null;
+				_currentAnswer[i] = null;
 
-				if(i<_earliestFreeSlot)
-					_earliestFreeSlot = i;
+				if(i<_firstFreeSlotId)
+					_firstFreeSlotId = i;
 			}
 		}
 	}
 
-	public bool CheckWin()
+	public bool HasWon()
 	{
-		for(int i=0; i<_answer.Length; ++i)
+		for(int i=0; i<_currentAnswer.Length; ++i)
 		{
-			if(_answer[i] == null)
+			if(_currentAnswer[i] == null)
 				return false;
 
-			if(_answer[i].character != _desiredAnswer[i])
+			if(_currentAnswer[i].character != _desiredAnswer[i])
 				return false;
 		}
 
@@ -75,8 +74,8 @@ public class AnswerManager : IDisposable
 
 	public void Dispose()
 	{
-		onWon = null;
+		_onWon = null;
 		
-		_answer = null;
+		_currentAnswer = null;
 	}
 }

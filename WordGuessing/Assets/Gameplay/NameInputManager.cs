@@ -13,9 +13,10 @@ public class NameInputManager
 		_earliestFreeSlot = 0;
 	}
 
-	public void ListenTo(DraggableObject letter)
+	public void ListenTo(SlotPool slotPool)
 	{
-		letter.Register(AddLetter, RemoveLetter);//need to unregister later
+		slotPool.OnTileAdded += AddLetter;
+		slotPool.OnTileRemoved += RemoveLetter;//need to unregister later
 	}
 
 	public string GetString()
