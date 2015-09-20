@@ -14,14 +14,9 @@ using System.IO;
 
 public static class SaveData
 {
-	const string fileName = "user_data";
-
 	static HashSet<string> _completedLevels = new HashSet<string>();
 
-	static SaveData()
-	{
-		Load();
-	}
+	static XmlDocument _document = new XmlDocument();
 
 	public static bool IsCompleted(string answer)
 	{
@@ -33,29 +28,25 @@ public static class SaveData
 		_completedLevels.Add(answer);
 	}
 
-	public static void Load()
+	public static void LoadDataForCurrentUser()
 	{
 		try
 		{
-			if(File.Exists(GetFullPath()) == false)
+			_completedLevels.Clear();
+
+			string currentUser = TransitionData.GetUsername();
+
+			if(File.Exists(GetSaveDataPathForUser(currentUser)) == false)
 				return;
 
 			_completedLevels.Clear();
 
-			XmlDocument document = new XmlDocument();
-			document.Load(GetFullPath());
+			_document.Load(GetSaveDataPathForUser(currentUser));
 
-			foreach (XmlNode node in document.DocumentElement.ChildNodes)
-			{
-				if(node.Name == "username")
-				{
-					TransitionData.SetUsername(node.InnerText);
-				}
+			XmlNodeList completedLevelNodeList = _document["completedLevels"].ChildNodes;
 
-				string currentLevel = node.Name;
-
-				_completedLevels.Add(currentLevel);
-			}
+			foreach(XmlNode completedLevelNode in completedLevelNodeList)
+				_completedLevels.Add(completedLevelNode.Name);
 		}
 		catch(Exception e)
 		{
@@ -63,27 +54,26 @@ public static class SaveData
 		}
 	}
 
-	public static void Save()
+	public static void SaveDataForCurrentUser()
 	{
 		try
 		{
-			XmlDocument document = new XmlDocument();
-			XmlNode rootNode = document.CreateElement("completedLevels");
+			string currentUser = TransitionData.GetUsername();
 
-			XmlNode node = document.CreateElement("username");
-			node.InnerText = TransitionData.GetUsername();
-			rootNode.AppendChild(node);
+			_document = new XmlDocument();
+
+			XmlElement completedLevels = _document.CreateElement("completedLevels");
 
 			foreach (string answer in _completedLevels)
 			{
-				node = document.CreateElement(answer);
+				XmlElement completedLevelNode = _document.CreateElement(answer);
 
-				rootNode.AppendChild(node);
+				completedLevels.AppendChild(completedLevelNode);
 			}
 
-			document.AppendChild(rootNode);
+			_document.AppendChild(completedLevels);
 
-			document.Save (GetFullPath());
+			_document.Save(GetSaveDataPathForUser(currentUser));
 		}
 		catch(Exception e)
 		{
@@ -91,8 +81,8 @@ public static class SaveData
 		}
 	}
 
-	static string GetFullPath()
+	public static string GetSaveDataPathForUser(string username)
 	{
-		return Application.persistentDataPath + "\\" + fileName;
+		return Application.persistentDataPath + "\\" + username;
 	}
 }

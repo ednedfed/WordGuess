@@ -100,7 +100,7 @@ public class GameSetup : MonoBehaviour
 	void OnWon(string answer)
 	{
 		SaveData.AddToCompleted(answer);
-		SaveData.Save();
+		SaveData.SaveDataForCurrentUser();
 
 		StartCoroutine(LoadLevelAfterDelay.Execute(0.2f, LevelNames.Complete));
 	}

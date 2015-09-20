@@ -7,7 +7,7 @@ public class SubmitButton : MonoBehaviour
 
 	void OnMouseUp()
 	{
-		registrationManager.Submit();
+		registrationManager.SubmitUsername();
 		
 		Application.LoadLevel(LevelNames.LevelSelect);
 	}

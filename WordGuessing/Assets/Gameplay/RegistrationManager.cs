@@ -24,12 +24,13 @@ public class RegistrationManager : MonoBehaviour
 
 	NameInputManager _nameInputManager;
 
-	public void Submit()
+	public void SubmitUsername()
 	{
 		string username = _nameInputManager.GetString();
 
 		TransitionData.SetUsername(username);
-		SaveData.Save();
+
+		SaveData.LoadDataForCurrentUser();
 
 		Debug.Log(username);
 	}
