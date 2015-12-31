@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public static class LoadLevelAfterDelay
 {
@@ -7,6 +8,6 @@ public static class LoadLevelAfterDelay
 	{
 		yield return new WaitForSeconds(seconds);
 		
-		Application.LoadLevel(levelName);
+		SceneManager.LoadScene(levelName);
 	}
 }

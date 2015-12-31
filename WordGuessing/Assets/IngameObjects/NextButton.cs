@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class NextButton : MonoBehaviour
 {
@@ -7,6 +7,6 @@ public class NextButton : MonoBehaviour
 	{
 		TransitionData.IncrementLevel();
 
-		Application.LoadLevel(LevelNames.Gameplay);
+		SceneManager.LoadScene(LevelNames.Gameplay);
 	}
 }

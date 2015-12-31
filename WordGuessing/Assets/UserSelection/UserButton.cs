@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UserButton : MonoBehaviour
@@ -10,6 +10,6 @@ public class UserButton : MonoBehaviour
 	{
 		TransitionData.SetUsername(this.text.text);
 		
-		Application.LoadLevel(LevelNames.LevelSelect);
+		SceneManager.LoadScene(LevelNames.LevelSelect);
 	}
 }

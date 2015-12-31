@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LevelSelectButton : MonoBehaviour
@@ -18,6 +19,6 @@ public class LevelSelectButton : MonoBehaviour
 	{
 		TransitionData.SetCurrentLevel(this.id);
 
-		Application.LoadLevel(LevelNames.Gameplay);
+		SceneManager.LoadScene(LevelNames.Gameplay);
 	}
 }

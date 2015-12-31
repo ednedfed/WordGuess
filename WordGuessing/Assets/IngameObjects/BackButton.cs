@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class BackButton : MonoBehaviour
 {
 	void OnMouseUp()
 	{
-		Application.LoadLevel(LevelNames.LevelSelect);
+		SceneManager.LoadScene(LevelNames.LevelSelect);
 	}
 }

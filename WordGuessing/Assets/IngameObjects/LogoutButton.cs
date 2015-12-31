@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class LogoutButton : MonoBehaviour
 {
 	void OnMouseUp()
 	{
-		Application.LoadLevel(LevelNames.Registration);
+		SceneManager.LoadScene(LevelNames.Registration);
 	}
 }
